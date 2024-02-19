@@ -1,0 +1,5 @@
+[wokwi]
+version = 1
+firmware = '.pio/build/ATmega328PB/firmware.hex'
+elf = '.pio/build/ATmega328PB/firmware.elf'
+rfc2217ServerPort = 4000
