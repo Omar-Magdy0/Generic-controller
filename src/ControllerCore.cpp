@@ -1,18 +1,11 @@
-#include "HAL/HAL.h"
+#include "ControllerCore.h"
 
 int main(){
-   // setupFunction();
-  SREG |= (1<<7);
+  setupFunction();
   Serial0.begin(9600);
-  char sad[] = "sadrage\n";
-
-  for(int i = 0;sad[i] != '\0';i++)
-  Serial0.write(sad[i]);
-
-
-
-
-  while(1){
-  }
+  const char sad[] = "roidRage";
+  while (1)
+  { 
+   }
   return 0;
 }
