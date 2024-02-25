@@ -235,7 +235,11 @@ enum ClockSource2 : uint8_t {
 
 // Set Force Output Compare bit
 // Ex: SET_FOC(3,A,1)
+#if defined AVR_ATmega1284_FAMILY
 #define SET_FOC(T,Q,V) (TCCR##T##C = (V) ? TCCR##T##C | _BV(FOC##T##Q) : TCCR##T##C & ~_BV(FOC##T##Q))
+#elif defined AVR_ATmega328_FAMILY 
+#define SET_FOC(T,Q,V) (TCCR##T##B = (V) ? TCCR##T##B | _BV(FOC##T##Q) : TCCR##T##B & ~_BV(FOC##T##Q))
+#endif
 #define SET_FOCA(T,V) SET_FOC(T,A,V)
 #define SET_FOCB(T,V) SET_FOC(T,B,V)
 #define SET_FOCC(T,V) SET_FOC(T,C,V)

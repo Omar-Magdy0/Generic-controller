@@ -3,20 +3,20 @@
 
 #include <avr/io.h>
 #include <stdlib.h>
-
+#include <Print.h>
 
 #define TX_BUFFER_SIZE 32
 #define RX_BUFFER_SIZE 32
 typedef int8_t tx_buffer_index_t;
 typedef int8_t rx_buffer_index_t;
 
-struct Serial{
+class Serial : public Print{
 public:
   void begin(int32_t baudrate);
-  void write(char c);
+  size_t write(uint8_t c);
  // unsigned char read();
   void end();
-  void print(const char text[]);
+  //void print(const char text[]);
   unsigned char read();
   void readUntil(unsigned char* message,unsigned char c);
   unsigned char *tx_buffer;
@@ -32,6 +32,6 @@ public:
 };
 
 
-
+extern Serial Serial0;
 
 #endif

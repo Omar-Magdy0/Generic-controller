@@ -3,10 +3,12 @@
 
 #include "ProIO.h"
 #include "Serial.h"
+#include "globalTimeKeeper.h"
+
 extern Serial Serial0;
 
-void setupFunction(){
-  SREG |= (1<<SREG_I);
-}
+void setupFunction();
+
+
 
 #endif
