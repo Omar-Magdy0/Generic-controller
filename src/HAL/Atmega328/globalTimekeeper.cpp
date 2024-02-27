@@ -5,9 +5,9 @@
 #define prescaler 64
 volatile uint16_t globalTimeMillis;
 volatile uint8_t allRemainingFract;
-#define timerOVFtoMillis ((prescaler * 256) / (F_CPU))
-#define remainingFractSH ((timerOVFtoMillis*1000 % 1000) >> 4)
-#define maxFract (1000 >> 4)
+#define timerOVFtoMillis ((prescaler * 256) / (F_CPU / (int)10E6))
+#define remainingFractSH ((timerOVFtoMillis % 1000) >> 3)
+#define maxFract (1000 >> 3)
 
 ISR(TIMER0_OVF_vect){
 	uint16_t mils; 

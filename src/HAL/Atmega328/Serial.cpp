@@ -1,5 +1,5 @@
 #include "Serial.h"
-#include "avr/interrupt.h"
+
 
 Serial Serial0;
 
@@ -29,6 +29,7 @@ void Serial::end(){
 }
 
 
+
 size_t Serial::write(uint8_t c){
   tx_buffer_index_t i = (tx_buffer_head + 1) % TX_BUFFER_SIZE;
   tx_buffer[tx_buffer_head] = c;
@@ -36,7 +37,7 @@ size_t Serial::write(uint8_t c){
   tx_buffer_head = i;
   UCSR0B |= (1 << UDRIE0);
   SREG |= (1 << SREG_I);
-  return 0;
+  return 1;
 }
 
 /*
@@ -92,3 +93,5 @@ ISR(USART0_UDRE_vect){
 ISR(USART0_RX_vect){
   Serial0.rx_done_func();
 }
+
+

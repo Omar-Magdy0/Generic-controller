@@ -2,6 +2,7 @@
 #define SERIAL_H
 
 #include <avr/io.h>
+#include "avr/interrupt.h"
 #include <stdlib.h>
 #include <Print.h>
 
@@ -10,13 +11,14 @@
 typedef int8_t tx_buffer_index_t;
 typedef int8_t rx_buffer_index_t;
 
+
+
+
 class Serial : public Print{
 public:
   void begin(int32_t baudrate);
-  size_t write(uint8_t c);
- // unsigned char read();
+  size_t write(uint8_t);
   void end();
-  //void print(const char text[]);
   unsigned char read();
   void readUntil(unsigned char* message,unsigned char c);
   unsigned char *tx_buffer;
