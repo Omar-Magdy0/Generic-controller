@@ -1,10 +1,10 @@
 #include "Serial.h"
 
 
-Serial Serial0;
+uart Serial0;
 
 
-void Serial::begin(int32_t baudrate){
+void uart::begin(int32_t baudrate){
   //ENABLE UART INTERRUPTS and Peripheral
   SREG &= ~(1 << SREG_I);
   UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | (1 << RXCIE0);
@@ -22,7 +22,7 @@ void Serial::begin(int32_t baudrate){
   SREG |= (1 << SREG_I);
 }
 
-void Serial::end(){
+void uart::end(){
   UCSR0B &= ~((1 << RXEN0) | (1 << TXEN0));
   free(tx_buffer);
   free(rx_buffer);
@@ -30,8 +30,8 @@ void Serial::end(){
 
 
 
-size_t Serial::write(uint8_t c){
-  tx_buffer_index_t i = (tx_buffer_head + 1) % TX_BUFFER_SIZE;
+size_t uart::write(uint8_t c){
+  tx_buffer_index i = (tx_buffer_head + 1) % TX_BUFFER_SIZE;
   tx_buffer[tx_buffer_head] = c;
   SREG &= ~(1 << SREG_I);
   tx_buffer_head = i;
@@ -40,29 +40,26 @@ size_t Serial::write(uint8_t c){
   return 1;
 }
 
-/*
-void Serial::print(const char text[]){
-  for(int8_t i = 0;text[i] != '\0'; i++)write(text[i]);
-}*/
 
-unsigned char Serial::read(){
+
+unsigned char uart::read(){
   if (rx_buffer_head == rx_buffer_tail){
     return -1;
   } else {
     unsigned char c = rx_buffer[rx_buffer_tail];
-    rx_buffer_tail = (rx_buffer_index_t)(rx_buffer_tail + 1) % RX_BUFFER_SIZE;
+    rx_buffer_tail = (rx_buffer_index)(rx_buffer_tail + 1) % RX_BUFFER_SIZE;
     return c;
   }
 }
 
-void Serial::readUntil(unsigned char* message,unsigned char c){
+void uart::readUntil(unsigned char* message,unsigned char c){
   uint8_t i = 0;
   while (message[i] != c){
     message[i++] = read();
   }
 }
 
-void Serial::tx_complete_func(){
+void uart::tx_complete_func(){
 
   unsigned char c = tx_buffer[tx_buffer_tail];
   tx_buffer_tail = (tx_buffer_tail + 1) % TX_BUFFER_SIZE;
@@ -76,9 +73,9 @@ void Serial::tx_complete_func(){
   }
 }
 
-void Serial::rx_done_func(){
+void uart::rx_done_func(){
   unsigned char c = UDR0;
-  rx_buffer_index_t i = (unsigned int)(rx_buffer_head + 1) % RX_BUFFER_SIZE;
+  rx_buffer_index i = (unsigned int)(rx_buffer_head + 1) % RX_BUFFER_SIZE;
   if ( i != rx_buffer_tail){
     rx_buffer[rx_buffer_head] = c;
     rx_buffer_head = i;

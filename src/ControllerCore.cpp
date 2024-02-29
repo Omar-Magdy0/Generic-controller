@@ -10,12 +10,10 @@ int main(){
   Serial0.begin(9600);
   clk0CountMillis(START);
   
-
   while (1)
-  { _delay_ms(100);
+  { _delay_ms(500);
     Serial0.print("FUCK  YOU");
     Serial0.print('\n');
-    
    }
   return 0;
 }

@@ -28,7 +28,7 @@ ISR(TIMER0_OVF_vect){
 }
 // end for timer 1
 
-uint16_t millis(){
+uint16_t mils(){
     SREG &= ~(1 << SREG_I);
     uint16_t t = globalTimeMillis;
     SREG |= (1 << SREG_I);

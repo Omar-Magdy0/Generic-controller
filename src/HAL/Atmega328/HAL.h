@@ -5,7 +5,7 @@
 #include "Serial.h"
 #include "globalTimeKeeper.h"
 
-extern Serial Serial0;
+extern uart Serial0;
 
 void setupFunction();
 

@@ -8,13 +8,13 @@
 
 #define TX_BUFFER_SIZE 32
 #define RX_BUFFER_SIZE 32
-typedef int8_t tx_buffer_index_t;
-typedef int8_t rx_buffer_index_t;
+typedef int8_t tx_buffer_index;
+typedef int8_t rx_buffer_index;
 
 
 
 
-class Serial : public Print{
+class uart : public Print{
 public:
   void begin(int32_t baudrate);
   size_t write(uint8_t);
@@ -29,11 +29,11 @@ public:
   uint8_t tx_buffer_tail = 0;
   void tx_complete_func();
   void rx_done_func();
-  Serial(){};
+  uart(){};
 ;
 };
 
 
-extern Serial Serial0;
+extern uart Serial0;
 
 #endif
