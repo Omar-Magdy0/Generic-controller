@@ -1,11 +1,14 @@
-#include "Serial.h"
+/*
+#include "My_Serial.h"
+//#include "hal_settings.h"
+
+#ifdef _customSerial
+
+uart0 Serial0;
 
 
-uart Serial0;
-
-
-void uart::begin(int32_t baudrate){
-  //ENABLE UART INTERRUPTS and Peripheral
+void uart0::begin(int32_t baudrate){
+  //ENABLE UART0 INTERRUPTS and Peripheral
   SREG &= ~(1 << SREG_I);
   UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | (1 << RXCIE0);
   //Async mode / no parity
@@ -15,14 +18,14 @@ void uart::begin(int32_t baudrate){
   UBRR0 = (F_CPU/(16 * baudrate)) - 1;
 
 //Malloc some bytes for buffer
-  tx_buffer = (uint8_t *)malloc(32);
-  rx_buffer = (uint8_t *)malloc(32);
+  tx_buffer = (uint8_t *)malloc(TX_BUFFER_SIZE);
+  rx_buffer = (uint8_t *)malloc(RX_BUFFER_SIZE);
 
 
   SREG |= (1 << SREG_I);
 }
 
-void uart::end(){
+void uart0::end(){
   UCSR0B &= ~((1 << RXEN0) | (1 << TXEN0));
   free(tx_buffer);
   free(rx_buffer);
@@ -30,9 +33,13 @@ void uart::end(){
 
 
 
-size_t uart::write(uint8_t c){
+size_t uart0::write(uint8_t c){
   tx_buffer_index i = (tx_buffer_head + 1) % TX_BUFFER_SIZE;
   tx_buffer[tx_buffer_head] = c;
+
+
+
+  
   SREG &= ~(1 << SREG_I);
   tx_buffer_head = i;
   UCSR0B |= (1 << UDRIE0);
@@ -42,7 +49,7 @@ size_t uart::write(uint8_t c){
 
 
 
-unsigned char uart::read(){
+unsigned char uart0::read(){
   if (rx_buffer_head == rx_buffer_tail){
     return -1;
   } else {
@@ -52,14 +59,14 @@ unsigned char uart::read(){
   }
 }
 
-void uart::readUntil(unsigned char* message,unsigned char c){
+void uart0::readUntil(unsigned char* message,unsigned char c){
   uint8_t i = 0;
   while (message[i] != c){
     message[i++] = read();
   }
 }
 
-void uart::tx_complete_func(){
+void uart0::tx_complete_func(){
 
   unsigned char c = tx_buffer[tx_buffer_tail];
   tx_buffer_tail = (tx_buffer_tail + 1) % TX_BUFFER_SIZE;
@@ -73,7 +80,7 @@ void uart::tx_complete_func(){
   }
 }
 
-void uart::rx_done_func(){
+void uart0::rx_done_func(){
   unsigned char c = UDR0;
   rx_buffer_index i = (unsigned int)(rx_buffer_head + 1) % RX_BUFFER_SIZE;
   if ( i != rx_buffer_tail){
@@ -92,3 +99,5 @@ ISR(USART0_RX_vect){
 }
 
 
+#endif
+*/

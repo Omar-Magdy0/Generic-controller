@@ -1,5 +1,7 @@
+
+/*
 #include "ProIO.h"
-#include <avr/interrupt.h>
+#include "globalTimeKeeper.h"
 
 // TIMERCOUNTER1 settings
 #define prescaler 64
@@ -44,3 +46,4 @@ void clk0CountMillis(uint8_t command){
 	if (command == END)TIMSK0 &= ~( 1 << TOIE0);}
 
 
+*/

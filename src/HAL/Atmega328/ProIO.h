@@ -11,8 +11,9 @@
  * Use direct port manipulation to save scads of processor time.
  * Contributed by Triffid_Hunter and modified by Kliment, thinkyhead, Bob-the-Kuhn, et.al.
  */
+
+
 #include "../shared/Marduino.h"
-#include <avr/io.h>
 #include "./Config.h"
 
 

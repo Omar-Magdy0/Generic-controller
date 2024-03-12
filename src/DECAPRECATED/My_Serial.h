@@ -1,10 +1,11 @@
-#ifndef SERIAL_H
-#define SERIAL_H
+#ifndef MY_SERIAL_H
+#define MY_SERIAL_H
+//#include "hal_settings.h"
+#ifdef _customSerial
 
-#include <avr/io.h>
-#include "avr/interrupt.h"
-#include <stdlib.h>
-#include <Print.h>
+#include "../shared/Marduino.h"
+
+
 
 #define TX_BUFFER_SIZE 32
 #define RX_BUFFER_SIZE 32
@@ -14,10 +15,11 @@ typedef int8_t rx_buffer_index;
 
 
 
-class uart : public Print{
+class uart0 : public Print{
 public:
   void begin(int32_t baudrate);
   size_t write(uint8_t);
+  using Print::write;
   void end();
   unsigned char read();
   void readUntil(unsigned char* message,unsigned char c);
@@ -29,11 +31,13 @@ public:
   uint8_t tx_buffer_tail = 0;
   void tx_complete_func();
   void rx_done_func();
-  uart(){};
+  uart0(){};
 ;
 };
 
 
-extern uart Serial0;
+extern uart0 Serial0;
+
+#endif
 
 #endif

@@ -1,13 +1,17 @@
 #ifndef HAL_H
 #define HAL_H
 
+#include "hal_settings.h"
 #include "ProIO.h"
-#include "Serial.h"
-#include "globalTimeKeeper.h"
 
-extern uart Serial0;
+#ifdef _customSerial
 
-void setupFunction();
+#include "My_Serial.h"
+extern uart0 Serial0;
+#endif
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 #pragma once
-#include <stdint.h>
+/*
+#include "../shared/Marduino.h"
 
 #define timeKeeper \
 do {\
@@ -16,4 +17,7 @@ do {\
 #define START 1
 #define END 0
 void clk0CountMillis(uint8_t command);
-uint16_t mils(); 
+uint16_t mils();
+
+
+ */
