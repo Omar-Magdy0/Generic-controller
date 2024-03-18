@@ -9,7 +9,7 @@
       "id": "btn1",
       "top": 294.2,
       "left": 76.8,
-      "attrs": { "color": "blue" }
+      "attrs": { "color": "blue", "bounce": "0" }
     },
     {
       "type": "board-ssd1306",
@@ -27,7 +27,22 @@
       "left": 138.2,
       "attrs": { "color": "red" }
     },
-    { "type": "wokwi-led", "id": "led2", "top": -90, "left": 195.8, "attrs": { "color": "red" } }
+    { "type": "wokwi-led", "id": "led2", "top": -90, "left": 195.8, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": -137.8,
+      "left": -28.8,
+      "attrs": { "color": "green", "bounce": "0" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -52.8,
+      "left": 57.05,
+      "rotate": 90,
+      "attrs": { "value": "10000" }
+    }
   ],
   "connections": [
     [ "btn1:2.r", "uno:GND.1", "green", [ "h0" ] ],
@@ -45,7 +60,11 @@
     [ "pot1:SIG", "uno:A0", "green", [ "v-105.6", "h172.4" ] ],
     [ "led2:A", "uno:10", "green", [ "v28.8", "h-19.2" ] ],
     [ "led2:C", "uno:GND.1", "green", [ "v19.2", "h-76.4" ] ],
-    [ "led1:C", "uno:GND.1", "green", [ "v0" ] ]
+    [ "led1:C", "uno:GND.1", "green", [ "v0" ] ],
+    [ "btn2:1.r", "uno:2", "green", [ "v-28.8", "h125" ] ],
+    [ "btn2:2.r", "uno:GND.1", "green", [ "h0" ] ],
+    [ "r1:2", "uno:5V", "green", [ "h0" ] ],
+    [ "r1:1", "btn2:1.r", "green", [ "h0", "v-57.6" ] ]
   ],
   "dependencies": {}
 }

@@ -1,10 +1,10 @@
 {
-  "C_Cpp_Runner.cCompilerPath": "/home/renderer/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
-  "C_Cpp_Runner.cppCompilerPath": "/home/renderer/.platformio/packages/toolchain-atmelavr/bin/avr-g++",
-  "C_Cpp_Runner.debuggerPath": "/home/renderer/.platformio/packages/toolchain-atmelavr/bin/avr-gdb",
-  "C_Cpp_Runner.cStandard": "gnu11",
-  "C_Cpp_Runner.cppStandard": "gnu++17",
   "C_Cpp_Runner.msvcBatchPath": "",
+  "C_Cpp_Runner.cCompilerPath": "gcc",
+  "C_Cpp_Runner.cppCompilerPath": "g++",
+  "C_Cpp_Runner.debuggerPath": "gdb",
+  "C_Cpp_Runner.cStandard": "",
+  "C_Cpp_Runner.cppStandard": "",
   "C_Cpp_Runner.useMsvc": false,
   "C_Cpp_Runner.warnings": [
     "-Wall",
@@ -37,22 +37,7 @@
   "C_Cpp_Runner.warningsAsError": false,
   "C_Cpp_Runner.compilerArgs": [],
   "C_Cpp_Runner.linkerArgs": [],
-  "C_Cpp_Runner.includePaths": [
-    "/media/renderer/59265a2b-d6f5-4b6a-ad90-6c1b1b9d04ac/Programming/Generic controller/include",
-    "/media/renderer/59265a2b-d6f5-4b6a-ad90-6c1b1b9d04ac/Programming/Generic controller/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/variants/pb-variant",
-    "/media/renderer/59265a2b-d6f5-4b6a-ad90-6c1b1b9d04ac/Programming/Generic controller/.pio/libdeps/ATmega328PB/Unity/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/AVR_examples/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/EEPROM/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/Optiboot_flasher/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/SPI/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/SPI1/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/SoftwareSerial/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/Wire/src",
-    "/home/renderer/.platformio/packages/framework-arduino-avr-minicore/libraries/Wire1/src",
-    ""
-  ],
+  "C_Cpp_Runner.includePaths": [],
   "C_Cpp_Runner.includeSearch": [
     "*",
     "**/*"

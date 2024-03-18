@@ -10,8 +10,10 @@
 
 #endif
 
-#define TRIAC_PIN 
+#define TRIAC0_PIN 
 #define BUZZER_PIN
+
+#define ZEROCROSS0_PIN 2 
 
 #define MOS1_PIN
 #define MOS2_PIN

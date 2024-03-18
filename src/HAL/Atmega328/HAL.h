@@ -10,7 +10,11 @@
 extern uart0 Serial0;
 #endif
 
+extern uint32_t globalTime;
 
+inline void getTime(){
+    globalTime = millis();
+} 
 
 
 

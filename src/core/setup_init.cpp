@@ -3,15 +3,15 @@
 #include "../Features/Features.h"
 
 void  setup_init(){
-    Serial.begin(9600);
+    Serial.begin(115200);
     _delay_ms(50);
     
     #if _display_ > 0
     screen.init();
+    
     #endif
 
 
-    Serial.print("wakeup");
 
 }
 

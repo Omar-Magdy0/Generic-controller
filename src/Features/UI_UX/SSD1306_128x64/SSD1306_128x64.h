@@ -1,5 +1,5 @@
 #pragma once
 
-#include "../UI_UX.h"
-#include <lightDisplay.h>
 
+#include "../pics/monobitmaps.h"
+#include <lightDisplay.h>
