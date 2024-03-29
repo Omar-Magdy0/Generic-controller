@@ -10,7 +10,7 @@
 
 #endif
 
-#define TRIAC0_PIN 
+#define TRIAC0_PIN 9
 #define BUZZER_PIN
 
 #define ZEROCROSS0_PIN 2 
