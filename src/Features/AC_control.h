@@ -48,3 +48,7 @@ extern STTriac0 Triac0;
 #if defined _TRIAC1
 extern STTriac1 Triac1;
 #endif
+
+ISR(TIMER0_OVF_vect){
+    
+}

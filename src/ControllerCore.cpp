@@ -13,7 +13,7 @@
 void setup(){
   setup_init();
   Triac0.init();
-  Triac0.set_power(0);
+  Triac0.set_power(30);
 
 }
 
