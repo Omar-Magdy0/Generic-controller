@@ -78,10 +78,15 @@ void Triac_zeroCross::zeroCross_irq_mode(uint8_t mode){
 
 void STTriac0::init(){
     buffer = (unsigned char*)malloc(sizeof(unsigned char)*bufferLength);
-    SET_CS2(PRESCALER_1024);
-    SBI(TIMSK2,TOIE2);
     SET_INPUT(ZEROCROSS0_PIN);
     SET_OUTPUT(TRIAC0_PIN);
+
+    //COMPARE MATCH EVERY 2ms
+    SET_CS(2 ,PRESCALER_1024);
+    SET_WGM(2, CTC_OCRnA );
+    OCR2A = 125;
+
+    SBI(TIMSK2, OCIE0A);
     
     
   }
@@ -112,4 +117,14 @@ void triac0_irq(){
   WRITE(TRIAC0_PIN, pinValue);
   Triac0.buffer_head++;
   if(Triac0.buffer_head == 256)Triac0.buffer_head = 0;
+}
+
+uint8_t ISR2_count = 0;
+ISR(TIMER2_COMPA_vect){
+  if(!(ISR2_count%5)){
+    triac0_irq();
+    Serial.println(millis());
+  }
+  Serial.println(OCR2A);
+  ISR2_count++;
 }
