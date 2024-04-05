@@ -18,4 +18,4 @@
 #define MOS1_PIN
 #define MOS2_PIN
 
-#define NTC_PIN
+#define thermistor0_pin A0

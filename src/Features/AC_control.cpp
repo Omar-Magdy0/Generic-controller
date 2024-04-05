@@ -24,6 +24,10 @@ void Triac_zeroCross::set_power(uint8_t p){
     for(uint8_t i = 0;i < bufferLength;i++)buffer[i] = 0;
     return;
   }
+  else if(power == 255){
+    for(uint8_t i = 0;i < bufferLength;i++)buffer[i] = 255;
+    return;
+  }
   uint8_t mask;
   bool moreThanHalf = power/128;
   if(moreThanHalf){
@@ -32,7 +36,7 @@ void Triac_zeroCross::set_power(uint8_t p){
     mask = round( (((bufferLength * 8) - 1.0))  / power);
   }
 
-  for(uint8_t i = 0; i < bufferLength; i++){
+  for(uint8_t i = 0 ; i < bufferLength; i++){
     //cleans and clears byte before doing bitwise
     if(moreThanHalf){
       buffer[i] = 255;
@@ -40,7 +44,7 @@ void Triac_zeroCross::set_power(uint8_t p){
       buffer[i] = 0;
     }
     for(uint8_t j = 0 ; j < 8; j++){
-      if( (( (i*8) + j) % mask) == 0){
+      if( (( (i*8) + j + 1) % mask) == 0){
         #ifdef AVR
         if(moreThanHalf){
           buffer[i] &= pgm_read_byte(&clrbit[j & 7]);
@@ -81,10 +85,12 @@ void STTriac0::init(){
     SET_INPUT(ZEROCROSS0_PIN);
     SET_OUTPUT(TRIAC0_PIN);
 
-    //COMPARE MATCH EVERY 2ms
-    SET_CS(2 ,PRESCALER_1024);
+    //Sets prescaler to 128 and Compare match every 124counts ==> 2ms
+    SBI(TCCR2B, CS20);
+    CBI(TCCR2B, CS21);
+    SBI(TCCR2B, CS22);
     SET_WGM(2, CTC_OCRnA );
-    OCR2A = 125;
+    OCR2A = 124;
 
     SBI(TIMSK2, OCIE0A);
     
@@ -121,10 +127,8 @@ void triac0_irq(){
 
 uint8_t ISR2_count = 0;
 ISR(TIMER2_COMPA_vect){
-  if(!(ISR2_count%5)){
+  if(!(( ISR2_count + 1) % 5 )){
     triac0_irq();
-    Serial.println(millis());
   }
-  Serial.println(OCR2A);
   ISR2_count++;
 }

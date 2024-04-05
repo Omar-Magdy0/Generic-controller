@@ -31,18 +31,11 @@
     {
       "type": "wokwi-pushbutton",
       "id": "btn2",
-      "top": -137.8,
-      "left": -28.8,
+      "top": -89.8,
+      "left": 19.2,
       "attrs": { "color": "green", "bounce": "0" }
     },
-    {
-      "type": "wokwi-resistor",
-      "id": "r1",
-      "top": -52.8,
-      "left": 57.05,
-      "rotate": 90,
-      "attrs": { "value": "10000" }
-    }
+    { "type": "wokwi-logic-analyzer", "id": "logic1", "top": 57.95, "left": 345.6, "attrs": {} }
   ],
   "connections": [
     [ "btn1:2.r", "uno:GND.1", "green", [ "h0" ] ],
@@ -63,8 +56,8 @@
     [ "led1:C", "uno:GND.1", "green", [ "v0" ] ],
     [ "btn2:1.r", "uno:2", "green", [ "v-28.8", "h125" ] ],
     [ "btn2:2.r", "uno:GND.1", "green", [ "h0" ] ],
-    [ "r1:2", "uno:5V", "green", [ "h0" ] ],
-    [ "r1:1", "btn2:1.r", "green", [ "h0", "v-57.6" ] ]
+    [ "uno:9", "logic1:D0", "green", [ "v-19.2", "h164" ] ],
+    [ "logic1:GND", "uno:GND.1", "black", [ "h0" ] ]
   ],
   "dependencies": {}
 }

@@ -10,8 +10,9 @@
 extern uart0 Serial0;
 #endif
 
-extern uint32_t globalTime;
+#define HAL_ADC_RANGE 10
 
+extern uint32_t globalTime;
 inline void getTime(){
     globalTime = millis();
 } 
