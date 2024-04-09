@@ -9,14 +9,13 @@
 //Function definitions for functions that loop
  void idle(){
   getTime();
+  HOTAIR_0.loop_func();
 }
 
 
 void setup(){
   setup_init();
-  Triac0.init();
-  Triac0.set_power(250);
-
+  HOTAIR_0.init();
 }
 
 

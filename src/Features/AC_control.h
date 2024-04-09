@@ -20,7 +20,6 @@ struct Triac_zeroCross{
     bool _get_frequency;
     volatile uint32_t time_sample0;
     volatile uint32_t time_sample1;
-    
     uint8_t dim_Type;
     unsigned char *buffer;
     uint8_t buffer_head = 0;
@@ -35,6 +34,8 @@ class STTriac0 : public Triac_zeroCross{
     public:
     void init();
 };
+extern void triac0_irq();
+
 
 class STTriac1 : public Triac_zeroCross{
     public:

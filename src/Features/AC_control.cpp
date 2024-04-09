@@ -69,6 +69,15 @@ void zeroCross0_irq(){
         //Function for deciding on or off state for Triac at zero points
 }
 
+
+void triac0_irq(){
+  uint8_t pinValue = Triac0.buffer[Triac0.buffer_head / 8] & pgm_read_byte(&setbit[Triac0.buffer_head & 7]);
+  WRITE(TRIAC0_PIN, pinValue);
+  Triac0.buffer_head++;
+  if(Triac0.buffer_head == 256)Triac0.buffer_head = 0;
+}
+
+
 void Triac_zeroCross::zeroCross_irq_mode(uint8_t mode){
   if(mode){
     zerocross_detect = true;
@@ -84,17 +93,6 @@ void STTriac0::init(){
     buffer = (unsigned char*)malloc(sizeof(unsigned char)*bufferLength);
     SET_INPUT(ZEROCROSS0_PIN);
     SET_OUTPUT(TRIAC0_PIN);
-
-    //Sets prescaler to 128 and Compare match every 124counts ==> 2ms
-    SBI(TCCR2B, CS20);
-    CBI(TCCR2B, CS21);
-    SBI(TCCR2B, CS22);
-    SET_WGM(2, CTC_OCRnA );
-    OCR2A = 124;
-
-    SBI(TIMSK2, OCIE0A);
-    
-    
   }
 #endif
 
@@ -118,17 +116,4 @@ void zeroCross1_irq(){
 #endif
 
 
-void triac0_irq(){
-  uint8_t pinValue = Triac0.buffer[Triac0.buffer_head / 8] & pgm_read_byte(&setbit[Triac0.buffer_head & 7]);
-  WRITE(TRIAC0_PIN, pinValue);
-  Triac0.buffer_head++;
-  if(Triac0.buffer_head == 256)Triac0.buffer_head = 0;
-}
 
-uint8_t ISR2_count = 0;
-ISR(TIMER2_COMPA_vect){
-  if(!(( ISR2_count + 1) % 5 )){
-    triac0_irq();
-  }
-  ISR2_count++;
-}
