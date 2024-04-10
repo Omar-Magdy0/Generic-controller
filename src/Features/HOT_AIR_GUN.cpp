@@ -1,19 +1,20 @@
 #include "HOT_AIR_GUN.H"
+#include "stdio.h"
 
 _hotAirGun HOTAIR_0;
-
+int power = 0;
 void _hotAirGun::loop_func(){
-    Serial.println(temperature->get_temperature_val());
-    heatValidation();
-    Serial.print("OUTPUT IS :");
-    outputVal->set_setpoint(100);
-    Serial.println(outputVal->PID_func(temperature->get_temperature_val(),globalTime));
-
+    //Serial.println(temperature->get_temperature_val());
+    //heatValidation();
+    char powerSerial[10];
+    while(Serial.available() > 0){
+        powerSerial
+        
+    }
+    Triac0.set_power(power);
 }
-
 void _hotAirGun::init(){
     Triac0.init();
-    Triac0.set_power(50);
     temperature = new _temperature(hotAir_thermistor_pin,0);
     outputVal = new PID(2,10,10,10,-10,(32000),0);
     TICK =  interrupt_tick;
@@ -61,7 +62,7 @@ void _hotAirGun::heatValidation(){
                 heat_validation_state = idle;
             }
             else{
-                Serial.println("THERMAL RUNAWAY");
+                Serial.println(F("THERMAL RUNAWAY"));
             }
         }
         break;

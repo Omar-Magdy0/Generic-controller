@@ -21,9 +21,7 @@ void setup(){
 
 
 void loop(){
-  // All thermistor temperature is in degrade.
-
-
+  delay(200);
   idle();
 }
   

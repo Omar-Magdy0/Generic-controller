@@ -55,7 +55,6 @@ void Triac_zeroCross::set_power(uint8_t p){
         buffer[i] |= ( 1 << j );
         #endif
       }
-       Serial.print( ((buffer[i] & (1 << j))) >> j );
     }
   }
 
