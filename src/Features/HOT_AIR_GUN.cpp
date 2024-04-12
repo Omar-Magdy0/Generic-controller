@@ -2,21 +2,74 @@
 #include "stdio.h"
 
 _hotAirGun HOTAIR_0;
-int power = 0;
-void _hotAirGun::loop_func(){
-    //Serial.println(temperature->get_temperature_val());
-    //heatValidation();
-    char powerSerial[10];
-    while(Serial.available() > 0){
-        powerSerial
-        
-    }
-    Triac0.set_power(power);
+
+//#define EXPERIMENT
+
+void _hotAirGun::set_temperature(int t){
+    _temperature_setpoint = t;
+    _PID->set_setpoint(t);
 }
+void _hotAirGun::set_fanspeed(uint8_t f){
+    fanspeed = f;
+}
+
+
+void _hotAirGun::loop_func(){
+    #if !defined EXPERIMENT
+    //GET TEMPERATURE VALUE
+    int __temperature = (temperature->get_temperature_val());
+    //GET OUTPUT POWER FROM PID FUNCTION and SET IT
+    int power = _PID->PID_func(__temperature,globalTime);
+    Triac0.set_power(power);
+    //GET TEMPERATURE SET BY USER FROM SERIAL INTERFACE
+    dataVals vH = _SerialGetValue();
+    switch (vH.c)
+    {
+    case 'T':
+        set_temperature(vH.value);
+        break;
+    case 'F':
+        set_fanspeed(vH.value);
+        break;
+
+    default:
+        break;
+    }
+    Serial.print("PT");
+    Serial.print(power);
+    Serial.print(";TV");
+    Serial.print(__temperature);
+    Serial.print(";ST");
+    Serial.print(_temperature_setpoint);
+    Serial.print(";FS");
+    Serial.println(fanspeed);
+    //DETECT THERMAL RUNOUTS
+    //heatValidation();
+
+    #endif
+    #if defined EXPERIMENT
+    dataVals vH = _SerialGetValue();
+    switch (vH.c)
+    {
+    case 'G':
+        Triac0.set_power(vH.value);
+        break;
+    case 'F':
+        set_fanspeed(vH.value);
+        break;
+
+    default:
+        break;
+    }
+    #endif
+}
+
+
 void _hotAirGun::init(){
     Triac0.init();
+    //START A TEMPERATURE OBJECT AND A PID one and Set interrupt function
     temperature = new _temperature(hotAir_thermistor_pin,0);
-    outputVal = new PID(2,10,10,10,-10,(32000),0);
+    _PID = new PID(2,10,10,10,-10,(32000),0);
     TICK =  interrupt_tick;
     TICK_INIT();
 }

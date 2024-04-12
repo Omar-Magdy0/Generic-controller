@@ -11,6 +11,8 @@
 extern uart0 Serial0;
 #endif
 
+#define TEST(n,b) (!!((n)&_BV(b)))
+
 #define HAL_ADC_RANGE 10
 extern void(*TICK)();
 void TICK_INIT();
@@ -39,6 +41,7 @@ inline void getTime(){
     #endif
     SBI(DIDR0, ch);
   }
+  #define MUX5
 #define ADC_TO_CHANNEL(c)(14-c)
   // Begin ADC sampling on the given channel. Called from Temperature::isr!
   static void adc_start(const uint8_t ch) {

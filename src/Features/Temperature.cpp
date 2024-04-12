@@ -12,11 +12,10 @@ uint16_t _temperature::get_temperature_val(){
     return temperature_val;
 }
 
-void _temperature::set_temperature_setpoint(uint16_t val){
-    temperature_setpoint = val;
-}
 
 void _temperature::get_adc_val(){
+    adc_start(ADC_TO_CHANNEL(pin));
+    while(!adc_ready());
     if(adc_ready()){
         uint16_t val = adc_value();
         adc_sum += val;
@@ -27,5 +26,4 @@ void _temperature::get_adc_val(){
             adc_sum = 0;
         }
     }
-    adc_start(ADC_TO_CHANNEL(A0));
 }

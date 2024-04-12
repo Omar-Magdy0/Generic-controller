@@ -18,4 +18,4 @@
 #define MOS1_PIN
 #define MOS2_PIN
 
-#define hotAir_thermistor_pin A0
+#define hotAir_thermistor_pin A1
