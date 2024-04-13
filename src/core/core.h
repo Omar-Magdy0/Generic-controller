@@ -7,5 +7,5 @@ struct dataVals{
     int value;   
 };
 
-dataVals _SerialGetValue();
+dataVals _SerialGetValue(unsigned char c);
 #define TEST(n,b) (!!((n)&_BV(b)))

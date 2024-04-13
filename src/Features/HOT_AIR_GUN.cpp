@@ -22,7 +22,7 @@ void _hotAirGun::loop_func(){
     int power = _PID->PID_func(__temperature,globalTime);
     Triac0.set_power(power);
     //GET TEMPERATURE SET BY USER FROM SERIAL INTERFACE
-    dataVals vH = _SerialGetValue();
+    dataVals vH = _SerialGetValue('\r');
     switch (vH.c)
     {
     case 'T':
@@ -31,17 +31,25 @@ void _hotAirGun::loop_func(){
     case 'F':
         set_fanspeed(vH.value);
         break;
-
+    case 'P':
+        break;
+    case 'I':
+        break;
+    case 'D':
+        break;
     default:
         break;
     }
-    Serial.print("PT");
+    static const char* HOT_AIRGUN_TXT[] PROGMEM= {  "PT", ";TV",
+                                                    ";ST", ";FS"};
+    Serial.write('*');                                                
+    Serial.print(HOT_AIRGUN_TXT[1]);
     Serial.print(power);
-    Serial.print(";TV");
+    Serial.print(HOT_AIRGUN_TXT[2]);
     Serial.print(__temperature);
-    Serial.print(";ST");
+    Serial.print(HOT_AIRGUN_TXT[3]);
     Serial.print(_temperature_setpoint);
-    Serial.print(";FS");
+    Serial.print(HOT_AIRGUN_TXT[4]);
     Serial.println(fanspeed);
     //DETECT THERMAL RUNOUTS
     //heatValidation();

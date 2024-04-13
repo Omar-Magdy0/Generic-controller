@@ -10,13 +10,12 @@ inline void validateMessage(){
 
 
 
-dataVals _SerialGetValue(){
+dataVals _SerialGetValue(unsigned char c){
     char _Serial[10];
     dataVals data;
     while(Serial.available() > 0){
         if(data.c = Serial.read()){
-            Serial.setTimeout(100);
-            Serial.readBytesUntil('\r',_Serial,10);
+            Serial.readBytesUntil(c,_Serial,10);
             data.value = atoi(_Serial);
             return data;
         }
