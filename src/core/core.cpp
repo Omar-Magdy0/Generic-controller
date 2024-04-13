@@ -2,8 +2,14 @@
 
 #define TEST(n,b) (!!((n)&_BV(b)))
 
-inline void validateMessage(){
+void _SerialValidateMessage(){
     Serial.print(F("OK"));
+    Serial.write('\r');
+}
+
+void _SerialErrorMessage(){
+    Serial.print(F("ERR"));
+    Serial.write('\r');
 }
 
 
@@ -14,12 +20,19 @@ dataVals _SerialGetValue(unsigned char c){
     char _Serial[10];
     dataVals data;
     while(Serial.available() > 0){
-        if(data.c = Serial.read()){
+        data.c = Serial.read();
+        if(data.c){
             Serial.readBytesUntil(c,_Serial,10);
-            data.value = atoi(_Serial);
+            data.value = atof(_Serial);
             return data;
         }
     }
-    data.c = 0;
+    data.c = -1;
     return data;
+}
+
+void _SerialReturnValue(char c,float val){
+    Serial.write(c);
+    Serial.print(val);
+    Serial.print('\r');
 }

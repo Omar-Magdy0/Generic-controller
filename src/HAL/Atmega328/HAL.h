@@ -41,8 +41,8 @@ inline void getTime(){
     #endif
     SBI(DIDR0, ch);
   }
-  #define MUX5
-#define ADC_TO_CHANNEL(c)(14-c)
+
+#define ADC_TO_CHANNEL(c)(c-14)
   // Begin ADC sampling on the given channel. Called from Temperature::isr!
   static void adc_start(const uint8_t ch) {
     #ifdef MUX5

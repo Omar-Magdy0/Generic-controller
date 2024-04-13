@@ -2,10 +2,14 @@
 
 #include "setup_init.h"
 
+#define TEST(n,b) (!!((n)&_BV(b)))
+
 struct dataVals{
     char c;
-    int value;   
+    float value;   
 };
 
 dataVals _SerialGetValue(unsigned char c);
-#define TEST(n,b) (!!((n)&_BV(b)))
+void _SerialReturnValue(char c,float val);
+void _SerialValidateMessage();
+void _SerialErrorMessage();

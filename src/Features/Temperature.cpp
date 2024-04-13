@@ -3,7 +3,7 @@
 _temperature::_temperature(uint8_t p , uint8_t i){
     pin = p;
     adc_init();
-    adc_enable(pin);
+    adc_enable(ADC_TO_CHANNEL(pin));
     *_thermistor = thermistor(pin,i);
 };
 
@@ -14,8 +14,6 @@ uint16_t _temperature::get_temperature_val(){
 
 
 void _temperature::get_adc_val(){
-    adc_start(ADC_TO_CHANNEL(pin));
-    while(!adc_ready());
     if(adc_ready()){
         uint16_t val = adc_value();
         adc_sum += val;
@@ -26,4 +24,5 @@ void _temperature::get_adc_val(){
             adc_sum = 0;
         }
     }
+    adc_start(ADC_TO_CHANNEL(pin));
 }

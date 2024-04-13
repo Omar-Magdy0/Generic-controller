@@ -15,7 +15,7 @@
 
 #define ZEROCROSS0_PIN 2 
 
-#define MOS1_PIN
-#define MOS2_PIN
+
 
 #define hotAir_thermistor_pin A1
+#define hotAir_Fan_pin 10

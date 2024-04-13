@@ -5,6 +5,7 @@ _hotAirGun HOTAIR_0;
 
 //#define EXPERIMENT
 
+
 void _hotAirGun::set_temperature(int t){
     _temperature_setpoint = t;
     _PID->set_setpoint(t);
@@ -22,34 +23,85 @@ void _hotAirGun::loop_func(){
     int power = _PID->PID_func(__temperature,globalTime);
     Triac0.set_power(power);
     //GET TEMPERATURE SET BY USER FROM SERIAL INTERFACE
-    dataVals vH = _SerialGetValue('\r');
+    dataVals vH = _SerialGetValue(' ');
     switch (vH.c)
     {
-    case 'T':
-        set_temperature(vH.value);
+    //SET VALUES
+    case 'S':
+        vH = _SerialGetValue('\r');
+        switch (vH.c)
+        {
+        case 'F':
+            set_fanspeed(vH.value);
+            _SerialValidateMessage();
+            break;
+        case 'T':
+            set_temperature(vH.value);
+            _SerialValidateMessage();
+            break;
+        case 'P':
+            _PID->set_Kp(vH.value);
+            _SerialValidateMessage();
+            break;
+        case 'I':
+            _PID->set_Ki(vH.value);
+            _SerialValidateMessage();
+            break;
+        case 'D':
+            _PID->set_Kd(vH.value);
+            _SerialValidateMessage();
+            break;
+        default:
+            _SerialErrorMessage();
+            break;
+        }
         break;
-    case 'F':
-        set_fanspeed(vH.value);
+    //GET VALUES
+    case 'G':
+        vH = _SerialGetValue('\r');
+        switch (vH.c)
+        {
+        case 'F':
+            _SerialReturnValue('F',fanspeed);
+            break;
+        case 'T':
+            _SerialReturnValue('T',__temperature);
+            break;
+        case 'P':
+            _SerialReturnValue('P',_PID->get_Kp());
+            break;
+        case 'I':
+            _SerialReturnValue('I',_PID->get_Ki());
+            break;
+        case 'D':
+            _SerialReturnValue('D',_PID->get_Kd());
+            break;
+        case 'O':
+            _SerialReturnValue('O',power);
+            break;
+        case 'S':
+            _SerialReturnValue('S',_temperature_setpoint);
+            break;
+        default:
+            _SerialErrorMessage();
+            break;
+        }
         break;
-    case 'P':
-        break;
-    case 'I':
-        break;
-    case 'D':
+    //DEFAULT ERROR HANDLING
+    case -1:
         break;
     default:
+        _SerialErrorMessage();
         break;
-    }
-    static const char* HOT_AIRGUN_TXT[] PROGMEM= {  "PT", ";TV",
-                                                    ";ST", ";FS"};
-    Serial.write('*');                                                
-    Serial.print(HOT_AIRGUN_TXT[1]);
+    };       
+
+    Serial.print(F("*PT"));
     Serial.print(power);
-    Serial.print(HOT_AIRGUN_TXT[2]);
+    Serial.print(F(";TV"));
     Serial.print(__temperature);
-    Serial.print(HOT_AIRGUN_TXT[3]);
+    Serial.print(F(";TS"));
     Serial.print(_temperature_setpoint);
-    Serial.print(HOT_AIRGUN_TXT[4]);
+    Serial.print(F(";FS"));
     Serial.println(fanspeed);
     //DETECT THERMAL RUNOUTS
     //heatValidation();
@@ -77,7 +129,7 @@ void _hotAirGun::init(){
     Triac0.init();
     //START A TEMPERATURE OBJECT AND A PID one and Set interrupt function
     temperature = new _temperature(hotAir_thermistor_pin,0);
-    _PID = new PID(2,10,10,10,-10,(32000),0);
+    _PID = new PID(0.5,0.01,0.2,10,-10,25,0);
     TICK =  interrupt_tick;
     TICK_INIT();
 }

@@ -11,6 +11,7 @@ PID::PID(float Kp, float Ki, float Kd,int max_err ,int min_err, int max_out, int
     max_output = max_out;
 }
 
+
 void PID::reset_PID(){
     sum_error = 0;
     last_error = 0;
@@ -18,14 +19,14 @@ void PID::reset_PID(){
 }
 
 int PID::PID_func(int current_val, unsigned long current_time){
-        int error = current_val - setpoint;
+        int error = setpoint - current_val;
         int32_t output;
         if(error > max_error){
             reset_PID();
-            output = min_output;
+            output = max_output;
         }else if(error < min_error){
             reset_PID();
-            output = max_output;
+            output = min_output;
         }else {
         int P = _Kp * error;
         sum_error += _Ki*error;
@@ -47,4 +48,25 @@ int PID::PID_func(int current_val, unsigned long current_time){
 
 void PID::set_setpoint(int _setpoint){
     setpoint = _setpoint;
+}
+
+
+
+float PID::get_Kp(){
+    return _Kp;   
+}
+float PID::get_Ki(){
+    return _Ki;
+}
+float PID::get_Kd(){
+    return _Kd;
+}
+void PID::set_Kp(float val){
+    _Kp = val;
+}
+void PID::set_Ki(float val){
+    _Ki = val;
+}
+void PID::set_Kd(float val){
+    _Kd = val;
 }
