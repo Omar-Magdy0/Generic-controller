@@ -4,6 +4,7 @@
 #include "hal_settings.h"
 #include "ProIO.h"
 #include "../../core/core.h"
+#include "EEPROM.h"
 
 #ifdef _customSerial
 

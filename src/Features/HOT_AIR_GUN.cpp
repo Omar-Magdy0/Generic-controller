@@ -103,6 +103,8 @@ void _hotAirGun::loop_func(){
     Serial.print(_temperature_setpoint);
     Serial.print(F(";FS"));
     Serial.println(fanspeed);
+
+    
     //DETECT THERMAL RUNOUTS
     //heatValidation();
 
