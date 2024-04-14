@@ -1,6 +1,7 @@
 #pragma once
 
 #include "setup_init.h"
+#include "timedEvent.h"
 
 #define TEST(n,b) (!!((n)&_BV(b)))
 

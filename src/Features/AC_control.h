@@ -15,6 +15,7 @@ struct Triac_zeroCross{
     uint16_t Amplitude;
     uint8_t power = 0;
     bool zerocross_detect;
+
     public:
     bool get_zerocross_detect();
     bool _get_frequency;
@@ -26,6 +27,7 @@ struct Triac_zeroCross{
     void zeroCross_irq_mode(uint8_t mode);
     virtual void init();
     void set_power(uint8_t p);
+    uint8_t get_power();
     double getFrequency();
 
 };

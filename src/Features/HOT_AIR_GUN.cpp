@@ -3,8 +3,6 @@
 
 _hotAirGun HOTAIR_0;
 
-//#define EXPERIMENT
-
 
 void _hotAirGun::set_temperature(int t){
     _temperature_setpoint = t;
@@ -16,13 +14,61 @@ void _hotAirGun::set_fanspeed(uint8_t f){
 
 
 void _hotAirGun::loop_func(){
-    #if !defined EXPERIMENT
     //GET TEMPERATURE VALUE
     int __temperature = (temperature->get_temperature_val());
     //GET OUTPUT POWER FROM PID FUNCTION and SET IT
     int power = _PID->PID_func(__temperature,globalTime);
     Triac0.set_power(power);
     //GET TEMPERATURE SET BY USER FROM SERIAL INTERFACE
+
+
+    
+    static timedEvent occassionalMessage = timedEvent(1000);
+
+    if(occassionalMessage.TRIGGERED()){
+        //communication part
+        set_getFrom_COM();
+
+        Serial.print(F("*PT"));
+        Serial.print(power);    
+        Serial.print(F(";TV"));
+        Serial.print(__temperature);
+        Serial.print(F(";TS"));
+        Serial.print(this->_temperature_setpoint);
+        Serial.print(F(";FS"));
+        Serial.println(this->fanspeed);
+        occassionalMessage.RESTART();
+    }
+    
+
+
+
+    //DETECT THERMAL RUNOUTS
+    //heatValidation();
+}
+
+void _hotAirGun::init(){
+    Triac0.init();
+    //START A TEMPERATURE OBJECT AND A PID one and Set interrupt function
+    temperature = new _temperature(hotAir_thermistor_pin,0);
+    float A;
+    _PID = new PID(EEPROM.get(0,A),EEPROM.get(4,A),EEPROM.get(8,A),10,-10,25,0);
+    TICK =  interrupt_tick;
+    TICK_INIT();
+}
+
+void _hotAirGun::interrupt_tick(){
+        HOTAIR_0.interrupt_tick_count++;
+
+        if(!(HOTAIR_0.interrupt_tick_count%5)){
+        triac0_irq();
+        HOTAIR_0.temperature->get_adc_val();
+        }
+}
+
+
+//SET OR GET VALURE FROM COMMUNICATION WRAPPER
+void _hotAirGun::set_getFrom_COM(){
     dataVals vH = _SerialGetValue(' ');
     switch (vH.c)
     {
@@ -51,6 +97,11 @@ void _hotAirGun::loop_func(){
             _PID->set_Kd(vH.value);
             _SerialValidateMessage();
             break;
+        case 'X':
+            EEPROM.put(0,_PID->get_Kp());
+            EEPROM.put(4,_PID->get_Ki());
+            EEPROM.put(8,_PID->get_Kd());
+            break;
         default:
             _SerialErrorMessage();
             break;
@@ -65,7 +116,7 @@ void _hotAirGun::loop_func(){
             _SerialReturnValue('F',fanspeed);
             break;
         case 'T':
-            _SerialReturnValue('T',__temperature);
+            _SerialReturnValue('T',temperature->get_temperature_val());
             break;
         case 'P':
             _SerialReturnValue('P',_PID->get_Kp());
@@ -77,7 +128,7 @@ void _hotAirGun::loop_func(){
             _SerialReturnValue('D',_PID->get_Kd());
             break;
         case 'O':
-            _SerialReturnValue('O',power);
+            _SerialReturnValue('O',Triac0.get_power());
             break;
         case 'S':
             _SerialReturnValue('S',_temperature_setpoint);
@@ -94,64 +145,21 @@ void _hotAirGun::loop_func(){
         _SerialErrorMessage();
         break;
     };       
-
-    Serial.print(F("*PT"));
-    Serial.print(power);
-    Serial.print(F(";TV"));
-    Serial.print(__temperature);
-    Serial.print(F(";TS"));
-    Serial.print(_temperature_setpoint);
-    Serial.print(F(";FS"));
-    Serial.println(fanspeed);
-
-    
-    //DETECT THERMAL RUNOUTS
-    //heatValidation();
-
-    #endif
-    #if defined EXPERIMENT
-    dataVals vH = _SerialGetValue();
-    switch (vH.c)
-    {
-    case 'G':
-        Triac0.set_power(vH.value);
-        break;
-    case 'F':
-        set_fanspeed(vH.value);
-        break;
-
-    default:
-        break;
-    }
-    #endif
 }
 
 
-void _hotAirGun::init(){
-    Triac0.init();
-    //START A TEMPERATURE OBJECT AND A PID one and Set interrupt function
-    temperature = new _temperature(hotAir_thermistor_pin,0);
-    _PID = new PID(0.5,0.01,0.2,10,-10,25,0);
-    TICK =  interrupt_tick;
-    TICK_INIT();
-}
 
-void _hotAirGun::interrupt_tick(){
-        HOTAIR_0.interrupt_tick_count++;
 
-        if(!(HOTAIR_0.interrupt_tick_count%5)){
-        triac0_irq();
-        HOTAIR_0.temperature->get_adc_val();
-        }
-}
 
+
+
+//TEMPERATURE VALIDATION
 
 enum temp_validator{
     idle,
     wait_check,
     check,
 };
-
 
 void _hotAirGun::heatValidation(){
     if(temperature->get_temperature_val() > HOT_AIR_MAXTEMP){

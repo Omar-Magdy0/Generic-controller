@@ -60,6 +60,11 @@ void Triac_zeroCross::set_power(uint8_t p){
 
 }
 
+uint8_t Triac_zeroCross::get_power(){
+  return power;
+}
+
+
 
 
 #if defined _TRIAC0

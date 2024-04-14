@@ -27,6 +27,7 @@ struct _hotAirGun :public program{
     void heatValidation();
     bool heating;
     PID *_PID;
+    void set_getFrom_COM();
 };
 
 
