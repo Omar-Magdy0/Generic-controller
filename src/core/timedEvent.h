@@ -7,13 +7,13 @@ enum{
     start,
     checking,
     triggered,
-    first
+    once
 };
 
 class timedEvent{
     unsigned long timeStart;
     unsigned long delay;
-    unsigned char state = triggered;
+    unsigned char state = checking;
     
     public:
     timedEvent(unsigned del){
@@ -33,10 +33,16 @@ class timedEvent{
     }
 
     inline bool TRIGGERED(){
-        if(globalTime - timeStart >= delay){
-                state = triggered;
-                return true;
+        if(state == checking){
+            if(globalTime - timeStart >= delay){
+                    state = triggered;
+                    return true;
+            }
         }
         return false;
+    }
+
+    inline void ONCE(){
+        state = once;
     }
 };

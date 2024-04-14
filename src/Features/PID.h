@@ -9,7 +9,7 @@ struct PID{
     float _Ki;
     float _Kd;
     int last_error;
-    float sum_error;
+    
     int setpoint;
     int max_error;
     int min_error;
@@ -19,6 +19,7 @@ struct PID{
     unsigned long last_time;
 
     public:
+    float sum_error;
     PID(float Kp, float Ki, float Kd, int max_err, int min_err, int max_out, int min_out);
     void set_setpoint(int _setpoint);
     float get_Kp();

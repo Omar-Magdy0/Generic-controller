@@ -8,6 +8,7 @@ void _hotAirGun::set_temperature(int t){
     _temperature_setpoint = t;
     _PID->set_setpoint(t);
 }
+
 void _hotAirGun::set_fanspeed(uint8_t f){
     fanspeed = f;
 }
@@ -17,12 +18,20 @@ void _hotAirGun::loop_func(){
     //GET TEMPERATURE VALUE
     int __temperature = (temperature->get_temperature_val());
     //GET OUTPUT POWER FROM PID FUNCTION and SET IT
-    int power = _PID->PID_func(__temperature,globalTime);
-    Triac0.set_power(power);
+
     //GET TEMPERATURE SET BY USER FROM SERIAL INTERFACE
 
 
+    static timedEvent PIDFunction = timedEvent(250);
+
+    if(PIDFunction.TRIGGERED()){
+        int power = _PID->PID_func(__temperature,globalTime);
+        Triac0.set_power(power);
+        Serial.println(_PID->sum_error);
+        PIDFunction.RESTART();
+    }
     
+
     static timedEvent occassionalMessage = timedEvent(1000);
 
     if(occassionalMessage.TRIGGERED()){
@@ -30,13 +39,13 @@ void _hotAirGun::loop_func(){
         set_getFrom_COM();
 
         Serial.print(F("*PT"));
-        Serial.print(power);    
+        Serial.print(Triac0.get_power());    
         Serial.print(F(";TV"));
         Serial.print(__temperature);
         Serial.print(F(";TS"));
-        Serial.print(this->_temperature_setpoint);
+        Serial.print(_temperature_setpoint);
         Serial.print(F(";FS"));
-        Serial.println(this->fanspeed);
+        Serial.println(fanspeed);
         occassionalMessage.RESTART();
     }
     
@@ -101,6 +110,7 @@ void _hotAirGun::set_getFrom_COM(){
             EEPROM.put(0,_PID->get_Kp());
             EEPROM.put(4,_PID->get_Ki());
             EEPROM.put(8,_PID->get_Kd());
+            _SerialValidateMessage();
             break;
         default:
             _SerialErrorMessage();
@@ -146,10 +156,6 @@ void _hotAirGun::set_getFrom_COM(){
         break;
     };       
 }
-
-
-
-
 
 
 

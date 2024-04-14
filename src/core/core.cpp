@@ -33,6 +33,6 @@ dataVals _SerialGetValue(unsigned char c){
 
 void _SerialReturnValue(char c,float val){
     Serial.write(c);
-    Serial.print(val);
+    Serial.print(val,3);
     Serial.print('\r');
 }

@@ -20,7 +20,7 @@ void PID::reset_PID(){
 
 int PID::PID_func(int current_val, unsigned long current_time){
         int error = setpoint - current_val;
-        int32_t output;
+        float output;
         if(error > max_error){
             reset_PID();
             output = max_output;
@@ -28,10 +28,11 @@ int PID::PID_func(int current_val, unsigned long current_time){
             reset_PID();
             output = min_output;
         }else {
-        int P = _Kp * error;
-        sum_error += _Ki*error;
+        sum_error += float(_Ki*error);
+        float P = _Kp * error;
+        float I = sum_error*(current_time - last_time);
         float D = _Kd*(float(error - last_error)/(current_time - last_time));
-        output = P + sum_error/*I term*/ + D;
+        output = P + I + D;
         if(output > max_output){
             reset_PID();
             output = max_output;
