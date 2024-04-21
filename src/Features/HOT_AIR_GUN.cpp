@@ -11,27 +11,26 @@ void _hotAirGun::set_temperature(int t){
 
 void _hotAirGun::set_fanspeed(uint8_t f){
     fanspeed = f;
+    WRITE(hotAir_Fan_pin,f);
 }
 
 
 void _hotAirGun::loop_func(){
     //GET TEMPERATURE VALUE
     int __temperature = (temperature->get_temperature_val());
-    //GET OUTPUT POWER FROM PID FUNCTION and SET IT
-
-    //GET TEMPERATURE SET BY USER FROM SERIAL INTERFACE
 
 
-    static timedEvent PIDFunction = timedEvent(250);
+
+    //GET OUTPUT POWER FROM PID FUNCTION and SET IT AT approx 10HZ frequency (non critical parameter)
+    static timedEvent PIDFunction = timedEvent(100);
 
     if(PIDFunction.TRIGGERED()){
         int power = _PID->PID_func(__temperature,globalTime);
         Triac0.set_power(power);
-        Serial.println(_PID->sum_error);
         PIDFunction.RESTART();
     }
     
-
+    //OCCASIONAL message with the following
     static timedEvent occassionalMessage = timedEvent(1000);
 
     if(occassionalMessage.TRIGGERED()){
@@ -56,16 +55,23 @@ void _hotAirGun::loop_func(){
     //heatValidation();
 }
 
+
+
+
+
+// INITIALIZE HOT AIR GUN OBJECT
 void _hotAirGun::init(){
     Triac0.init();
+    PWM_PIN(hotAir_Fan_pin);
     //START A TEMPERATURE OBJECT AND A PID one and Set interrupt function
     temperature = new _temperature(hotAir_thermistor_pin,0);
     float A;
-    _PID = new PID(EEPROM.get(0,A),EEPROM.get(4,A),EEPROM.get(8,A),10,-10,25,0);
+    _PID = new PID(EEPROM.get(0,A),EEPROM.get(4,A),EEPROM.get(8,A),40,-40,30,0);
     TICK =  interrupt_tick;
     TICK_INIT();
 }
 
+// INTERRUPT REQUIRED FUNCTIONS INTERRUPT RUNS AT 500HZ frequency
 void _hotAirGun::interrupt_tick(){
         HOTAIR_0.interrupt_tick_count++;
 
@@ -160,7 +166,6 @@ void _hotAirGun::set_getFrom_COM(){
 
 
 //TEMPERATURE VALIDATION
-
 enum temp_validator{
     idle,
     wait_check,

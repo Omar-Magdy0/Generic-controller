@@ -50,14 +50,14 @@
     [ "pot2:VCC", "uno:5V", "red", [ "v-134.4", "h210.4", "v-19.2" ] ],
     [ "pot2:SIG", "uno:A2", "green", [ "v-76.8", "h297.2" ] ],
     [ "led1:A", "uno:9", "green", [ "v0" ] ],
-    [ "pot1:SIG", "uno:A0", "green", [ "v-105.6", "h172.4" ] ],
     [ "led2:A", "uno:10", "green", [ "v28.8", "h-19.2" ] ],
     [ "led2:C", "uno:GND.1", "green", [ "v19.2", "h-76.4" ] ],
     [ "led1:C", "uno:GND.1", "green", [ "v0" ] ],
     [ "btn2:1.r", "uno:2", "green", [ "v-28.8", "h125" ] ],
     [ "btn2:2.r", "uno:GND.1", "green", [ "h0" ] ],
     [ "uno:9", "logic1:D0", "green", [ "v-19.2", "h164" ] ],
-    [ "logic1:GND", "uno:GND.1", "black", [ "h0" ] ]
+    [ "logic1:GND", "uno:GND.1", "black", [ "h0" ] ],
+    [ "uno:A1", "pot1:SIG", "green", [ "v67.1", "h-178.5" ] ]
   ],
   "dependencies": {}
 }

@@ -8,9 +8,9 @@ struct PID{
     float _Kp;
     float _Ki;
     float _Kd;
-    int last_error;
+    int last_error = 0;
     
-    int setpoint;
+    int setpoint = 0;
     int max_error;
     int min_error;
     int max_output;

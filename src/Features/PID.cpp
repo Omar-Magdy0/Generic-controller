@@ -22,9 +22,11 @@ int PID::PID_func(int current_val, unsigned long current_time){
         int error = setpoint - current_val;
         float output;
         if(error > max_error){
+            //Saturate output
             reset_PID();
             output = max_output;
         }else if(error < min_error){
+            //Saturate output
             reset_PID();
             output = min_output;
         }else {
@@ -34,9 +36,11 @@ int PID::PID_func(int current_val, unsigned long current_time){
         float D = _Kd*(float(error - last_error)/(current_time - last_time));
         output = P + I + D;
         if(output > max_output){
+            //Saturate output
             reset_PID();
             output = max_output;
         }else if(output < min_output){
+            //Saturate output
             reset_PID();
             output = min_output;
         }
