@@ -66,7 +66,7 @@ void _hotAirGun::init(){
     //START A TEMPERATURE OBJECT AND A PID one and Set interrupt function
     temperature = new _temperature(hotAir_thermistor_pin,0);
     float A;
-    _PID = new PID(EEPROM.get(0,A),EEPROM.get(4,A),EEPROM.get(8,A),40,-40,30,0);
+    _PID = new PID(EEPROM.get(0,A),EEPROM.get(4,A),EEPROM.get(8,A),40,-40,EEPROM.get(12,A),0);
     TICK =  interrupt_tick;
     TICK_INIT();
 }
@@ -111,11 +111,15 @@ void _hotAirGun::set_getFrom_COM(){
         case 'D':
             _PID->set_Kd(vH.value);
             _SerialValidateMessage();
+        case 'M':
+            _PID->set_Maxout(vH.value);
+            _SerialValidateMessage();
             break;
         case 'X':
             EEPROM.put(0,_PID->get_Kp());
             EEPROM.put(4,_PID->get_Ki());
             EEPROM.put(8,_PID->get_Kd());
+            EEPROM.put(12,_PID->get_Maxout());
             _SerialValidateMessage();
             break;
         default:
@@ -148,6 +152,9 @@ void _hotAirGun::set_getFrom_COM(){
             break;
         case 'S':
             _SerialReturnValue('S',_temperature_setpoint);
+            break;
+        case 'M':
+            _SerialReturnValue('M',_PID->get_Maxout());
             break;
         default:
             _SerialErrorMessage();

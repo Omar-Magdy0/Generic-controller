@@ -4,12 +4,12 @@
 
 void _SerialValidateMessage(){
     Serial.print(F("OK"));
-    Serial.write('\r');
+    Serial.write('\n');
 }
 
 void _SerialErrorMessage(){
     Serial.print(F("ERR"));
-    Serial.write('\r');
+    Serial.write('\n');
 }
 
 

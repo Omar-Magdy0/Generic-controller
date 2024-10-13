@@ -25,9 +25,11 @@ struct PID{
     float get_Kp();
     float get_Ki();
     float get_Kd();
+    float get_Maxout();
     void set_Kp(float val);
     void set_Ki(float val);
     void set_Kd(float val);
+    void set_Maxout(float val);
     int PID_func(int current_val, unsigned long current_time);
     void reset_PID();
 

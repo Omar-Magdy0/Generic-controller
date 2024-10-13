@@ -66,6 +66,9 @@ float PID::get_Ki(){
 float PID::get_Kd(){
     return _Kd;
 }
+float PID::get_Maxout(){
+    return max_output;
+}
 void PID::set_Kp(float val){
     _Kp = val;
 }
@@ -74,4 +77,7 @@ void PID::set_Ki(float val){
 }
 void PID::set_Kd(float val){
     _Kd = val;
+}
+void PID::set_Maxout(float val){
+    max_output = val;
 }
